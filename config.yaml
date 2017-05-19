@@ -1,0 +1,8 @@
+- class: Mail
+  vars:
+  - boolean enabled true
+  - String mail some@email.com
+- class: Arrays
+  vars:
+  - String texts [ok;cancel]
+  - java.wut.Wow texts [new Wow("Hello");new Wow("World")]

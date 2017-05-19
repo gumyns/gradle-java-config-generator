@@ -58,8 +58,9 @@ class CodeGeneratorPlugin : Plugin<Project> {
     }
 
     private fun generateArrayConstructor(variableDef: VariableDef): String {
+        println(variableDef.values)
         when (variableDef.type) {
-            "String" -> variableDef.values?.joinToString(prefix = "\"", postfix = "\"")
+            "String" -> variableDef.values?.joinToString(transform = { "\"" + it + "\""})
             else -> variableDef.values?.joinToString()
         }.let {
             return "new %s[]{ %s }".format(variableDef.type.substring(variableDef.type.lastIndexOf('.') + 1), it)

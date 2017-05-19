@@ -11,7 +11,7 @@ buildscript {
         flatDir dirs:  "plugin/"
     }
     dependencies {
-        classpath "pl.gumyns:java-config-generator:0.1"
+        classpath "pl.gumyns:java-config-generator:0.2"
     }
 }
 
@@ -22,47 +22,36 @@ configGenerator {
     packageName("com.app.generated")
     file("./config.json")
 }
-
 ```
 
-in json file:
-
+in yaml file:
 ```
-[
-  {
-    "name":"Mail",
-    "variables": [
-      {"type":"String", "name": "value1", "value":"Ekhem"},
-      {"type":"int", "name": "value2", "value":"2"}
-    ]
-  },
-  {
-    "name":"SomeClass",
-    "variables": [
-      {"type":"boolean", "name": "value3", "value":"false"},
-      {"type":"double", "name": "value7", "value":"3.14"},
-      {"type":"double", "name": "value8", "values":["3.14", "42."]},
-      {"type":"java.wut.Wow", "name": "wow", "values":["new Wow(3.14)", "new Wow(42.)"]}
-    ]
-  }
-]
+- class: Mail
+  vars:
+  - boolean enabled true
+  - String mail some@email.com
+- class: Arrays
+  vars:
+  - String texts [ok;cancel]
+  - java.wut.Wow texts [new Wow("Hello");new Wow("World")]
 ```
 
 It will generate 2 classes:
 ```
+import java.lang.String;
+
 public final class Mail {
-  public static final String value1 = "Ekhem";
-  public static final int value2 = 2;
+  public static final boolean enabled = true;
+  public static final String mail = "some@email.com";
 }
 ```
 ```
+import java.lang.String;
 import java.wut.Wow;
 
-public final class SomeClass {
-  public static final boolean value3 = false;
-  public static final double value7 = 3.14;
-  public static final double[] value8 = new double[]{3.14, 42.};
-  public static final Wow[] wow = new Wow[]{new Wow(3.14), new Wow(42.)};
+public final class Arrays {
+  public static final String[] texts = new String[]{ "ok", "cancel" };
+  public static final Wow[] texts = new Wow[]{ new Wow("Hello"), new Wow("World") };
 }
 ```
 
