@@ -38,27 +38,50 @@ class CodeGeneratorPlugin : Plugin<Project> {
     }
 
     fun generateField(variableDef: VariableDef): FieldSpec? {
-        return FieldSpec.builder(
-                when (variableDef.type) {
-                    "String" -> ClassName.get(String::class.java)
-                    "boolean" -> TypeName.BOOLEAN
-                    "char" -> TypeName.CHAR
-                    "byte" -> TypeName.BYTE
-                    "short" -> TypeName.SHORT
-                    "int" -> TypeName.INT
-                    "float" -> TypeName.FLOAT
-                    "long" -> TypeName.LONG
-                    "double" -> TypeName.DOUBLE
-                    else -> ClassName.get(
-                            variableDef.type.substring(0..variableDef.type.lastIndexOf('.') - 1),
-                            variableDef.type.substring(variableDef.type.lastIndexOf('.') + 1)
-                    )
-                }, variableDef.name)
+        if (variableDef.value != null) {
+        return FieldSpec.builder(generateType(variableDef.type), variableDef.name)
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
                 .initializer(when (variableDef.type) {
                     "String" -> "\$S"
                     else -> "\$L"
                 }, variableDef.value)
                 .build()
+        } else if (variableDef.values != null) {
+            return FieldSpec.builder(ArrayTypeName.of(generateType(variableDef.type)), variableDef.name)
+                    .addModifiers(Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
+                    .initializer("\$L", generateArrayConstructor(variableDef))
+                    .build()
+        } else {
+            return FieldSpec.builder(TypeName.BOOLEAN, variableDef.name)
+                    .initializer("\$L", "false")
+                    .build()
+        }
+    }
+
+    private fun generateArrayConstructor(variableDef: VariableDef): String {
+       when (variableDef.type) {
+           "String" -> variableDef.values?.joinToString(prefix = "\"", postfix = "\"")
+           else -> variableDef.values?.joinToString()
+       }.let {
+           return "new %s[]{ %s }".format(variableDef.type.substring(variableDef.type.lastIndexOf('.') + 1), it)
+       }
+    }
+
+    private fun generateType(type: String):TypeName {
+        return when (type) {
+            "String" -> ClassName.get(String::class.java)
+            "boolean" -> TypeName.BOOLEAN
+            "char" -> TypeName.CHAR
+            "byte" -> TypeName.BYTE
+            "short" -> TypeName.SHORT
+            "int" -> TypeName.INT
+            "float" -> TypeName.FLOAT
+            "long" -> TypeName.LONG
+            "double" -> TypeName.DOUBLE
+            else -> ClassName.get(
+                    type.substring(0..type.lastIndexOf('.') - 1),
+                    type.substring(type.lastIndexOf('.') + 1)
+            )
+        }
     }
 }
