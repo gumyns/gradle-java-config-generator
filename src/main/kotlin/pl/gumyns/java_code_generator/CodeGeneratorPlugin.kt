@@ -12,26 +12,19 @@ import java.io.File
 class CodeGeneratorPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        with(project) {
+        project.run {
             extensions?.create("configGenerator", CodeGeneratorExtension::class.java)
             afterEvaluate {
-                val codeGenerator = extensions.getByType(CodeGeneratorExtension::class.java)
-                codeGenerator.classes?.let {
-                    for (classDef in it) {
-                        generateClass(classDef, codeGenerator.packageName!!).let {
-                            it?.writeTo(File("$buildDir/generated/config"))
-                        }
-                    }
+                extensions.getByType(CodeGeneratorExtension::class.java).apply {
+                    classes.forEach { generateClass(it, packageName!!)?.writeTo(File("$buildDir/generated/config")) }
                 }
             }
         }
     }
 
     fun generateClass(classDef: ClassDef, packageName: String): JavaFile? {
-        with(TypeSpec.classBuilder(classDef.name).addModifiers(Modifier.PUBLIC, Modifier.FINAL)) {
-            classDef.variables.forEach({
-                addField(generateField(it))
-            })
+        TypeSpec.classBuilder(classDef.name).addModifiers(Modifier.PUBLIC, Modifier.FINAL).run {
+            classDef.variables.forEach { addField(generateField(it)) }
             return JavaFile.builder(packageName, build()).build()
         }
     }
@@ -58,12 +51,11 @@ class CodeGeneratorPlugin : Plugin<Project> {
     }
 
     private fun generateArrayConstructor(variableDef: VariableDef): String {
-        println(variableDef.values)
         when (variableDef.type) {
-            "String" -> variableDef.values?.joinToString(transform = { "\"" + it + "\""})
+            "String" -> variableDef.values?.joinToString(transform = { "\"" + it + "\"" })
             else -> variableDef.values?.joinToString()
         }.let {
-            return "new %s[]{ %s }".format(variableDef.type.substring(variableDef.type.lastIndexOf('.') + 1), it)
+            return "new %s[]{ %s }".format(variableDef.type.apply { substring(lastIndexOf('.') + 1) }, it)
         }
     }
 
@@ -78,7 +70,7 @@ class CodeGeneratorPlugin : Plugin<Project> {
             "float" -> TypeName.FLOAT
             "long" -> TypeName.LONG
             "double" -> TypeName.DOUBLE
-            else -> with(type) { ClassName.get(substring(0..lastIndexOf('.') - 1), substring(lastIndexOf('.') + 1)) }
+            else -> type.run { ClassName.get(substring(0..lastIndexOf('.') - 1), substring(lastIndexOf('.') + 1)) }
         }
     }
 }

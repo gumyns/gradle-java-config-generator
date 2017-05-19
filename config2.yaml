@@ -1,0 +1,4 @@
+- class: Meh
+  vars:
+  - String texts [ok;cancel]
+  - java.wut.Wow texts [new Wow("Hello");new Wow("World")]

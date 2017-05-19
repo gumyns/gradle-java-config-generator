@@ -1,5 +1,5 @@
 group 'pl.gumyns'
-version '0.2'
+version '0.3'
 
 buildscript {
     ext.kotlin_version = '1.1.2-2'
@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//        classpath "pl.gumyns:java-config-generator:0.2"
+//        classpath "pl.gumyns:java-config-generator:0.3"
     }
 }
 
@@ -48,5 +48,5 @@ jar {
 //apply plugin: 'pl.gumyns.java-config-generator'
 //configGenerator {
 //    packageName("com.app.generated")
-//    file("./config.yaml")
+//    file("./config.yaml", "./config2.yaml")
 //}
