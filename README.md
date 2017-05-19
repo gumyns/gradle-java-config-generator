@@ -11,7 +11,7 @@ buildscript {
         flatDir dirs:  "plugin/"
     }
     dependencies {
-        classpath "pl.gumyns:java-config-generator:0.2"
+        classpath "pl.gumyns:java-config-generator:0.3"
     }
 }
 
