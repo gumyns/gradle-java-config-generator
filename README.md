@@ -20,7 +20,7 @@ buildscript {
 apply plugin: 'pl.gumyns.java-config-generator'
 configGenerator {
     packageName("com.app.generated")
-    file("./config.json")
+    file("./config.yaml")
 }
 ```
 
