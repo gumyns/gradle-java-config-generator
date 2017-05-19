@@ -2,13 +2,17 @@
 Main purpose is to mitigate feature from Android plugin which provides BuildConfig fields in gradle, but it's far from flexibility. 
 This one is more flexible, and isn't tied to Android plugin, so you can use it also in java projects.
 
+
 ## Usage
+
+Put plugin file to root/plugins or wherever you want.
+
 in build.gradle
 ```
 buildscript {
 
     repositories {
-        flatDir dirs:  "plugin/"
+        flatDir dirs:  "plugin/" // put directory where plugin is
     }
     dependencies {
         classpath "pl.gumyns:java-config-generator:0.3"
