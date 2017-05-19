@@ -1,0 +1,16 @@
+[
+  {
+    "name":"Mail",
+    "variables": [
+      {"type":"String", "name": "value1", "value":"Ekhem"},
+      {"type":"int", "name": "value2", "value":"2"}
+    ]
+  },
+  {
+    "name":"SomeClass",
+    "variables": [
+      {"type":"boolean", "name": "value3", "value":"false"},
+      {"type":"double", "name": "value7", "value":"3.14"}
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+plugin/
+libs/
+build/
+.idea/
+.gradle/

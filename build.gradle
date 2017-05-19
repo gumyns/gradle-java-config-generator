@@ -1,0 +1,47 @@
+group 'pl.gumyns'
+version '0.1'
+
+buildscript {
+    ext.kotlin_version = '1.1.2-2'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        flatDir dirs:  "plugin/"
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//        classpath "pl.gumyns:java-config-generator:0.1"
+    }
+}
+
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'kotlin'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+configurations {
+    extraLibs
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    extraLibs "com.google.code.gson:gson:2.8.0"
+    extraLibs "com.squareup:javapoet:1.9.0"
+    configurations.compile.extendsFrom(configurations.extraLibs)
+}
+
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+//apply plugin: 'pl.gumyns.java-config-generator'
+//configGenerator {
+//    packageName("com.app.generated")
+//    file("./config.json")
+//}
