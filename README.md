@@ -20,9 +20,11 @@ buildscript {
 apply plugin: 'pl.gumyns.java-config-generator'
 configGenerator {
     packageName("com.app.generated")
-    file("./config.yaml")
+    file("config.yaml")
+   // file("config.yaml", "config2.yaml") // you can also use multiple files
 }
 ```
+
 
 in yaml file:
 ```
