@@ -40,7 +40,9 @@ in json file:
     "name":"SomeClass",
     "variables": [
       {"type":"boolean", "name": "value3", "value":"false"},
-      {"type":"double", "name": "value7", "value":"3.14"}
+      {"type":"double", "name": "value7", "value":"3.14"},
+      {"type":"double", "name": "value8", "values":["3.14", "42."]},
+      {"type":"java.wut.Wow", "name": "wow", "values":["new Wow(3.14)", "new Wow(42.)"]}
     ]
   }
 ]
@@ -54,9 +56,13 @@ public final class Mail {
 }
 ```
 ```
+import java.wut.Wow;
+
 public final class SomeClass {
   public static final boolean value3 = false;
   public static final double value7 = 3.14;
+  public static final double[] value8 = new double[]{3.14, 42.};
+  public static final Wow[] wow = new Wow[]{new Wow(3.14), new Wow(42.)};
 }
 ```
 
