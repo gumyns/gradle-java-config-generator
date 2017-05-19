@@ -13,9 +13,8 @@ class CodeGeneratorPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         with(project) {
-            project.extensions?.create("configGenerator", CodeGeneratorExtension::class.java)
-
-            afterEvaluate({
+            extensions?.create("configGenerator", CodeGeneratorExtension::class.java)
+            afterEvaluate {
                 val codeGenerator = extensions.getByType(CodeGeneratorExtension::class.java)
                 codeGenerator.classes?.let {
                     for (classDef in it) {
@@ -24,28 +23,28 @@ class CodeGeneratorPlugin : Plugin<Project> {
                         }
                     }
                 }
-            })
+            }
         }
     }
 
     fun generateClass(classDef: ClassDef, packageName: String): JavaFile? {
-        val classBuilder = TypeSpec.classBuilder(classDef.name)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-        classDef.variables.forEach({
-            classBuilder.addField(generateField(it))
-        })
-        return JavaFile.builder(packageName, classBuilder.build()).build()
+        with(TypeSpec.classBuilder(classDef.name).addModifiers(Modifier.PUBLIC, Modifier.FINAL)) {
+            classDef.variables.forEach({
+                addField(generateField(it))
+            })
+            return JavaFile.builder(packageName, build()).build()
+        }
     }
 
     fun generateField(variableDef: VariableDef): FieldSpec? {
         if (variableDef.value != null) {
-        return FieldSpec.builder(generateType(variableDef.type), variableDef.name)
-                .addModifiers(Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
-                .initializer(when (variableDef.type) {
-                    "String" -> "\$S"
-                    else -> "\$L"
-                }, variableDef.value)
-                .build()
+            return FieldSpec.builder(generateType(variableDef.type), variableDef.name)
+                    .addModifiers(Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
+                    .initializer(when (variableDef.type) {
+                        "String" -> "\$S"
+                        else -> "\$L"
+                    }, variableDef.value)
+                    .build()
         } else if (variableDef.values != null) {
             return FieldSpec.builder(ArrayTypeName.of(generateType(variableDef.type)), variableDef.name)
                     .addModifiers(Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
@@ -59,15 +58,15 @@ class CodeGeneratorPlugin : Plugin<Project> {
     }
 
     private fun generateArrayConstructor(variableDef: VariableDef): String {
-       when (variableDef.type) {
-           "String" -> variableDef.values?.joinToString(prefix = "\"", postfix = "\"")
-           else -> variableDef.values?.joinToString()
-       }.let {
-           return "new %s[]{ %s }".format(variableDef.type.substring(variableDef.type.lastIndexOf('.') + 1), it)
-       }
+        when (variableDef.type) {
+            "String" -> variableDef.values?.joinToString(prefix = "\"", postfix = "\"")
+            else -> variableDef.values?.joinToString()
+        }.let {
+            return "new %s[]{ %s }".format(variableDef.type.substring(variableDef.type.lastIndexOf('.') + 1), it)
+        }
     }
 
-    private fun generateType(type: String):TypeName {
+    private fun generateType(type: String): TypeName {
         return when (type) {
             "String" -> ClassName.get(String::class.java)
             "boolean" -> TypeName.BOOLEAN
@@ -78,10 +77,7 @@ class CodeGeneratorPlugin : Plugin<Project> {
             "float" -> TypeName.FLOAT
             "long" -> TypeName.LONG
             "double" -> TypeName.DOUBLE
-            else -> ClassName.get(
-                    type.substring(0..type.lastIndexOf('.') - 1),
-                    type.substring(type.lastIndexOf('.') + 1)
-            )
+            else -> with(type) { ClassName.get(substring(0..lastIndexOf('.') - 1), substring(lastIndexOf('.') + 1)) }
         }
     }
 }
