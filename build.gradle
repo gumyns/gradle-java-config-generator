@@ -1,5 +1,5 @@
 group 'pl.gumyns'
-version '0.3'
+version '0.4'
 
 buildscript {
     ext.kotlin_version = '1.1.2-2'
@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//        classpath "pl.gumyns:java-config-generator:0.3"
+//        classpath "pl.gumyns:java-config-generator:0.4"
     }
 }
 
@@ -38,9 +38,9 @@ configurations {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     extraLibs "com.google.code.gson:gson:2.8.0"
+    extraLibs "com.fasterxml.jackson.core:jackson-core:2.7.4"
+    extraLibs "com.fasterxml.jackson.core:jackson-databind:2.0.1"
     extraLibs "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.7.4"
-    extraLibs group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4'
-    extraLibs group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
     extraLibs "com.squareup:javapoet:1.9.0"
     configurations.compile.extendsFrom(configurations.extraLibs)
     configurations.testCompile.extendsFrom(configurations.extraLibs)

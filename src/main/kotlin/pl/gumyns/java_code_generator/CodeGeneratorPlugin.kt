@@ -12,17 +12,13 @@ import java.util.*
 
 class CodeGeneratorPlugin : Plugin<Project> {
 
-    init {
-        println("Hello?")
-    }
-
     override fun apply(project: Project) {
         project.run {
             extensions?.create("configGenerator", CodeGeneratorExtension::class.java)
             afterEvaluate {
                 extensions.getByType(CodeGeneratorExtension::class.java).apply {
-                    project.rootProject.extensions?.extraProperties?.get("extraConfigFiles").let {
-                        (it as LinkedList<String>).forEach { file(it) }
+                    rootProject.extensions?.extraProperties?.get("extraConfigFiles")?.let {
+                        (it as LinkedList<*>).forEach { file(it.toString()) }
                     }
                     classes.forEach { generateClass(it, packageName!!)?.writeTo(File("$buildDir/generated/config")) }
                 }

@@ -61,3 +61,19 @@ public final class Arrays {
 }
 ```
 
+If you need too generate something per build type, or Android flavor, you can use this:
+```
+apply plugin: 'pl.gumyns.java-config-generator'
+
+ext.extraConfigFiles = new LinkedList<String>()
+configGenerator {
+    packageName("com.app.generated")
+    file("./config.yaml")
+}
+```
+
+And then, anywhere in the project:
+```
+extraConfigFiles.add("./extraConfig.yaml")
+```
+
