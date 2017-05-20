@@ -1,0 +1,30 @@
+group 'pl.gumyns.sample'
+version '1.0'
+
+buildscript {
+    repositories {
+        flatDir dirs: "../plugin"
+    }
+    dependencies {
+        classpath "pl.gumyns:java-config-generator:0.4"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'pl.gumyns.java-config-generator'
+
+ext.extraConfigFiles = new LinkedList<String>()
+configGenerator {
+    packageName("pl.gumyns.sample.java.generated")
+    file("config/config.yaml")
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

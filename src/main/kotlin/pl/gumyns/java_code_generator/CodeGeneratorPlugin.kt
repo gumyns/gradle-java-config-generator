@@ -7,6 +7,8 @@ import pl.gumyns.java_code_generator.model.ClassDef
 import pl.gumyns.java_code_generator.model.VariableDef
 import javax.lang.model.element.Modifier
 import com.squareup.javapoet.FieldSpec
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginConvention
 import java.io.File
 import java.util.*
 
@@ -21,6 +23,11 @@ class CodeGeneratorPlugin : Plugin<Project> {
                         (it as LinkedList<*>).forEach { file(it.toString()) }
                     }
                     classes.forEach { generateClass(it, packageName!!)?.writeTo(File("$buildDir/generated/config")) }
+                }
+                plugins.getPlugin(JavaPlugin::class.java).apply {
+                    convention.getPlugin(JavaPluginConvention::class.java).apply {
+                        sourceSets.getAt("main").java.srcDir(File("$buildDir/generated/config"))
+                    }
                 }
             }
         }

@@ -7,24 +7,14 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        flatDir dirs:  "plugin/"
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//        classpath "pl.gumyns:java-config-generator:0.4"
     }
 }
 
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'kotlin'
-
-//apply plugin: 'pl.gumyns.java-config-generator'
-//
-//ext.extraConfigFiles = new LinkedList<String>()
-//configGenerator {
-//    packageName("com.app.generated")
-//    file("./config2.yaml")
-//}
 
 repositories {
     jcenter()
@@ -45,7 +35,6 @@ dependencies {
     configurations.compile.extendsFrom(configurations.extraLibs)
     configurations.testCompile.extendsFrom(configurations.extraLibs)
     testCompile "junit:junit:4.12"
-//    extraConfigFiles.add("./config.yaml")
 }
 
 jar {
