@@ -8,14 +8,22 @@ import pl.gumyns.java_code_generator.model.VariableDef
 import javax.lang.model.element.Modifier
 import com.squareup.javapoet.FieldSpec
 import java.io.File
+import java.util.*
 
 class CodeGeneratorPlugin : Plugin<Project> {
+
+    init {
+        println("Hello?")
+    }
 
     override fun apply(project: Project) {
         project.run {
             extensions?.create("configGenerator", CodeGeneratorExtension::class.java)
             afterEvaluate {
                 extensions.getByType(CodeGeneratorExtension::class.java).apply {
+                    project.rootProject.extensions?.extraProperties?.get("extraConfigFiles").let {
+                        (it as LinkedList<String>).forEach { file(it) }
+                    }
                     classes.forEach { generateClass(it, packageName!!)?.writeTo(File("$buildDir/generated/config")) }
                 }
             }
