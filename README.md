@@ -61,7 +61,7 @@ public final class Arrays {
 }
 ```
 
-If you need too generate something per build type, or Android flavor, you can use this:
+If you need to generate something per build type, or Android flavor, you can use this:
 ```
 apply plugin: 'pl.gumyns.java-config-generator'
 

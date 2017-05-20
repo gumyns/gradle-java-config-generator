@@ -1,0 +1,5 @@
+- class: Config
+  vars:
+  - String message Hello world!
+  - boolean showAnswer true
+  - int answer 42
